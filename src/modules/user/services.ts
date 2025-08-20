@@ -71,14 +71,7 @@ export async function authUserService(credentials: AuthUserPayloadDTO): Promise<
         }
 
         // ===========================================================================================
-        const safeUserData = {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            status: user.status
-        };
-
+        const { password, ...safeUserData } = user;
         const token = jwt.sign(safeUserData, process.env.JWT_SECRET as string, { expiresIn: '1d' });
 
         // ===========================================================================================
