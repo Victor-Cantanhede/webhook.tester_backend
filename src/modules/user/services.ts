@@ -74,6 +74,7 @@ export async function authUserService(credentials: AuthUserPayloadDTO): Promise<
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                role: user.role,
                 status: user.status
             },
             process.env.JWT_SECRET as string,
