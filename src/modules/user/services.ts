@@ -71,20 +71,24 @@ export async function authUserService(credentials: AuthUserPayloadDTO): Promise<
         }
 
         // ===========================================================================================
-        const token = jwt.sign(
-            {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-                status: user.status
-            },
-            process.env.JWT_SECRET as string,
-            { expiresIn: '1d' }
-        );
+        const safeUserData = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            status: user.status
+        };
+
+        const token = jwt.sign(safeUserData, process.env.JWT_SECRET as string, { expiresIn: '1d' });
 
         // ===========================================================================================
-        return response.success({ message: 'Login successful!', data: { token } });
+        return response.success({
+            message: 'Login successful!',
+            data: {
+                token: token,
+                user: safeUserData
+            }
+        });
 
     } catch (error: any) {
         const err = error as Error;
