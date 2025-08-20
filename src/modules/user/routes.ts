@@ -7,4 +7,7 @@ export async function userRoutes(app: FastifyInstance) {
 
     app.post('/create', (req, res) => controller.createUser(req, res));
     app.post('/auth', (req, res) => controller.authUser(req, res));
+    
+    app.post('/auth_email', (req, res) => controller.sendAuthEmail(req, res));
+    app.put('/auth_email', (req, res) => controller.authEmail(req, res));
 }
