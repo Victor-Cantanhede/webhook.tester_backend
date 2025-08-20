@@ -13,7 +13,8 @@ export async function existingData({ inTable, index, data }: ExistingDataParams)
         const table = (prisma as any)[inTable];
 
         const response = await table.findFirst({
-            where: { [index]: data }
+            where: { [index]: data },
+            select: { id: true }
         });
 
         return response !== null;

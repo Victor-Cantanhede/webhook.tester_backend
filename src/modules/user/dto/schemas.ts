@@ -33,3 +33,12 @@ export const createUserPayload = z.object({
         .refine((val) => !/\s/.test(val), { message: 'The password cannot contain spaces!' }),
 });
 export type CreateUserPayloadDTO = z.infer<typeof createUserPayload>;
+
+
+/**
+ * ===========================================================================================
+ * AUTH USER PAYLOAD
+ * ===========================================================================================
+ */
+export const authUserPayload = createUserPayload.pick({ email: true }).extend({ password: z.string().max(100) });
+export type AuthUserPayloadDTO = z.infer<typeof authUserPayload>;
