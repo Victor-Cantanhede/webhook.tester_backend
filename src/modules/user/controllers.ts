@@ -37,7 +37,18 @@ export class UserController extends BaseController {
             const payload = validate<AuthUserPayloadDTO>(authUserPayload, req.body);
             if (!payload.success) return payload;
 
-            return await authUserService(payload.data as AuthUserPayloadDTO);
+            const response = await authUserService(payload.data as AuthUserPayloadDTO);
+            if (!response.success) return response;
+
+            res.setCookie('token', response.data.token as string, {
+                path: '/',
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production', // Enter false to test in development/test
+                sameSite: 'none',
+                maxAge: 60 * 60 * 24 // 1 day
+            });
+
+            return response;
         });
     }
 
