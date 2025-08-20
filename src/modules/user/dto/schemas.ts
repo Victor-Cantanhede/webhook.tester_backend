@@ -7,8 +7,20 @@ import { z } from 'zod';
  * ===========================================================================================
  */
 export const createUserPayload = z.object({
-    name: z.string().min(3).max(100),
-    email: z.email().min(3).max(100),
+    name: z
+        .string()
+        .trim()
+        .min(3)
+        .max(100)
+        .toUpperCase()
+        .transform((val) => val.replace(/\s+/g, ' ')),
+
+    email: z
+        .email()
+        .trim()
+        .min(3)
+        .max(100)
+        .toLowerCase(),
 
     password: z
         .string()

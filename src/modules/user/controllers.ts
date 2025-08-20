@@ -11,10 +11,10 @@ export class UserController extends BaseController {
     async createUser(req: FastifyRequest, res: FastifyReply) {
         return this.request(req, res, async () => {
 
-            const validation = validate<CreateUserPayloadDTO>(createUserPayload, req.body);
-            if (!validation.success) return validation;
+            const payload = validate<CreateUserPayloadDTO>(createUserPayload, req.body);
+            if (!payload.success) return payload;
 
-            return await createUserService();
+            return await createUserService(payload.data as CreateUserPayloadDTO);
         });
     }
 }

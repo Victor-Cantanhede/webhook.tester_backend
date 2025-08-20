@@ -32,3 +32,24 @@ export class BaseController {
         }
     }
 }
+
+
+function success<T>(params: { message: string; data?: T; statusCode?: number }): Response<T> {
+    return {
+        success: true,
+        message: params.message,
+        statusCode: params.statusCode ?? 200,
+        data: params.data
+    };
+}
+
+function error(params: { message: string; statusCode?: number; error?: any }): Response {
+    return {
+        success: false,
+        message: params.message,
+        statusCode: params.statusCode ?? 400,
+        error: params.error
+    };
+}
+
+export const response = { success, error };
