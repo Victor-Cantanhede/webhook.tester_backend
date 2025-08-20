@@ -60,3 +60,12 @@ export type SendAuthEmailPayloadDTO = z.infer<typeof sendAuthEmailPayload>;
  */
 export const authEmailPayload = createUserPayload.pick({ email: true }).extend({ code: z.string().max(100) });
 export type AuthEmailPayloadDTO = z.infer<typeof authEmailPayload>;
+
+
+/**
+ * ===========================================================================================
+ * CHANGE PASSWORD PAYLOAD
+ * ===========================================================================================
+ */
+export const changePasswordPayload = createUserPayload.pick({ email: true, password: true }).extend({ code: z.string().max(100) });
+export type ChangePasswordPayloadDTO = z.infer<typeof changePasswordPayload>;

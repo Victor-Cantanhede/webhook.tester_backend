@@ -1,8 +1,19 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { BaseController } from '../BaseController';
 import { validate } from '../../utils/validate';
-import { authEmailService, authUserService, createUserService, sendAuthEmailService } from './services';
-import { sendAuthEmailPayload, SendAuthEmailPayloadDTO, authUserPayload, AuthUserPayloadDTO, createUserPayload, CreateUserPayloadDTO, AuthEmailPayloadDTO, authEmailPayload } from './dto/schemas';
+import { authEmailService, authUserService, changePasswordService, createUserService, sendAuthEmailService } from './services';
+import {
+    sendAuthEmailPayload,
+    SendAuthEmailPayloadDTO,
+    authUserPayload,
+    AuthUserPayloadDTO,
+    createUserPayload,
+    CreateUserPayloadDTO,
+    AuthEmailPayloadDTO,
+    authEmailPayload,
+    ChangePasswordPayloadDTO,
+    changePasswordPayload
+} from './dto/schemas';
 
 
 export class UserController extends BaseController {
@@ -51,6 +62,18 @@ export class UserController extends BaseController {
             if (!payload.success) return payload;
 
             return await authEmailService(payload.data as AuthEmailPayloadDTO);
+        });
+    }
+
+
+    // CHANGE PASSWORD
+    async changePassword(req: FastifyRequest, res: FastifyReply) {
+        return this.request(req, res, async () => {
+
+            const payload = validate<ChangePasswordPayloadDTO>(changePasswordPayload, req.body);
+            if (!payload.success) return payload;
+
+            return await changePasswordService(payload.data as ChangePasswordPayloadDTO);
         });
     }
 }

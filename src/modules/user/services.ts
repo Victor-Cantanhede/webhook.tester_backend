@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import { prisma } from '../../lib/prisma/db';
 import { response, Response } from '../BaseController';
-import { AuthEmailPayloadDTO, AuthUserPayloadDTO, CreateUserPayloadDTO } from './dto/schemas';
+import { AuthEmailPayloadDTO, AuthUserPayloadDTO, ChangePasswordPayloadDTO, CreateUserPayloadDTO } from './dto/schemas';
 
 import { existingData } from '../../lib/prisma/commonQueries';
 import { v4 as uuidV4 } from 'uuid';
@@ -187,5 +187,38 @@ export async function authEmailService(data: AuthEmailPayloadDTO): Promise<Respo
     } catch (error: any) {
         const err = error as Error;
         return response.error({ message: 'Error authenticating email!', error: err });
+    }
+}
+
+
+/**
+ * ===========================================================================================
+ * CHANGE PASSWORD
+ * ===========================================================================================
+ */
+export async function changePasswordService(data: ChangePasswordPayloadDTO) {
+    try {
+        // ===========================================================================================
+        const savedCode = getCode(data.email);
+
+        if (!savedCode || (savedCode !== data.code)) {
+            return response.error({ message: 'Invalid or expired verification link! Generate a new link and try again.' });
+        }
+        deleteCode(data.email);
+
+        // ===========================================================================================
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+
+        await prisma.users.update({
+            where: { email: data.email },
+            data: { password: hashedPassword }
+        });
+
+        // ===========================================================================================
+        return response.success({ message: 'Password changed successfully!' });
+
+    } catch (error: any) {
+        const err = error as Error;
+        return response.error({ message: 'Error changing password!' });
     }
 }
