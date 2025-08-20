@@ -151,7 +151,7 @@ export async function sendAuthEmailService(email: string): Promise<Response> {
             from: 'Webhook Tester <no-reply@webhooktester.com>',
             to: email,
             subject: 'Email authentication',
-            text: `Click the link to authenticate your email: ${process.env.FRONT_URL}/auth_email/${newCode}`
+            text: `Click the link to authenticate your email: ${process.env.FRONT_URL}/auth_email/${email}_${newCode}`
         });
 
         // ===========================================================================================
