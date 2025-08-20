@@ -2,6 +2,7 @@ import 'dotenv/config';
 import Fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import fastifyCookie from '@fastify/cookie';
+import { userRoutes } from './modules/user/routes';
 
 
 async function bootstrap() {
@@ -26,6 +27,13 @@ async function bootstrap() {
         console.log('New connection detected!');
         res.status(200).send({ message: 'Server connected!' });
     });
+
+    // USER ROUTES
+    app.register(userRoutes, {
+        prefix: '/users'
+    });
+
+    //
 
     app.listen({ port: PORT }, (err, address) => {
         if (err) {
